@@ -60,3 +60,32 @@ def dynamic_programming_schedule():
     })
     total = dp[n]
     return df, total
+
+# ---------------- PRIORITY QUEUE ----------------
+def priority_queue_schedule():
+    flights = [
+        Flight("AI101", 1, 3, 2),
+        Flight("UK202", 2, 2, 1),
+        Flight("EK303", 3, 4, 3),
+        Flight("QR404", 1, 2, 2)
+    ]
+    flights.sort(key=lambda x: x.priority)
+
+    runways = [0, 0]
+    data = []
+
+    for f in flights:
+        r = 0 if runways[0] <= runways[1] else 1
+        start = max(f.arrival, runways[r])
+        end = start + f.duration
+        runways[r] = end
+        data.append({
+            "Flight": f.id,
+            "Runway": r,
+            "Start": start,
+            "End": end,
+            "Priority": f.priority
+        })
+
+    df = pd.DataFrame(data)
+    return df
