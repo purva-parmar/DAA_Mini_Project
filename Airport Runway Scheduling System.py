@@ -39,3 +39,24 @@ def backtracking_schedule():
 
     df = pd.DataFrame(data)
     return df
+
+# ---------------- DYNAMIC PROGRAMMING ----------------
+def dynamic_programming_schedule():
+    arrival = [1, 2, 3]
+    duration = [3, 2, 4]
+    n = len(arrival)
+    dp = [0] * (n + 1)
+
+    for i in range(1, n + 1):
+        arr = arrival[i - 1]
+        dur = duration[i - 1]
+        dp[i] = min(dp[i - 1] + dur, arr + dur)
+
+    df = pd.DataFrame({
+        "Flight": [f"F{i}" for i in range(1, n + 1)],
+        "Arrival": arrival,
+        "Duration": duration,
+        "Completion_Time": [dp[i] for i in range(1, n + 1)]
+    })
+    total = dp[n]
+    return df, total
