@@ -4,8 +4,8 @@
 # ------------------------------------------------------
 
 import pandas as pd
+import streamlit as st
 
-# ---------------- FLIGHT CLASS ----------------
 class Flight:
     def init(self, fid, arrival, duration, priority):
         self.id = fid
@@ -89,3 +89,42 @@ def priority_queue_schedule():
 
     df = pd.DataFrame(data)
     return df
+
+# ---------------- STREAMLIT UI ----------------
+st.set_page_config(page_title="Airport Runway Scheduler", layout="wide")
+
+st.title("✈ Airport Runway Scheduling System")
+st.markdown("### Compare Backtracking, Dynamic Programming, and Priority Queue Approaches")
+
+algo = st.sidebar.radio(
+    "Select an Algorithm:",
+    ["Backtracking", "Dynamic Programming", "Priority Queue"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.info("This system schedules flights on runways using different algorithmic techniques.")
+
+if algo == "Backtracking":
+    st.subheader("🧩 Backtracking Algorithm")
+    st.write("Explores all possible valid schedules to ensure no runway conflict.")
+    df = backtracking_schedule()
+    st.dataframe(df, use_container_width=True)
+    st.bar_chart(df.set_index("Flight")[["Start", "End"]])
+
+elif algo == "Dynamic Programming":
+    st.subheader("🧮 Dynamic Programming Algorithm")
+    st.write("Optimizes total completion time (minimizes delay).")
+    df, total = dynamic_programming_schedule()
+    st.dataframe(df, use_container_width=True)
+    st.metric("Minimum Total Completion Time", f"{total}")
+    st.line_chart(df.set_index("Flight")[["Completion_Time"]])
+
+elif algo == "Priority Queue":
+    st.subheader("🏆 Priority Queue Algorithm")
+    st.write("Schedules flights efficiently by giving priority to emergency or high-priority flights.")
+    df = priority_queue_schedule()
+    st.dataframe(df, use_container_width=True)
+    st.bar_chart(df.set_index("Flight")[["Start", "End"]])
+
+st.markdown("---")
+st.caption("Developed for DAA Mini Project — Demonstrating Scheduling Algorithms in Real-World Scenarios")
