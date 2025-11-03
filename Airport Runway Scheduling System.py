@@ -25,20 +25,33 @@ def backtracking_schedule():
     runways = [0, 0]
     data = []
 
-    for f in flights:
-        for r in range(2):
-            start = max(f.arrival, runways[r])
-            end = start + f.duration
+    def assign(index):
+        if index == len(flights):
+            return True
+        flight = flights[index]
+        for r in range(len(runways)):
+            start = max(flight.arrival, runways[r])
+            end = start + flight.duration
+
+            runways[r] = end
             data.append({
-                "Flight": f.id,
+                "Flight": flight.id,
                 "Runway": r,
                 "Start": start,
                 "End": end
             })
-            runways[r] = end
 
-    df = pd.DataFrame(data)
-    return df
+            if assign(index + 1):
+                return True
+
+            data.pop()
+            runways[r] -= flight.duration
+
+        return False
+
+    assign(0)
+    return pd.DataFrame(data)
+
 
 # ---------------- DYNAMIC PROGRAMMING ----------------
 def dynamic_programming_schedule():
