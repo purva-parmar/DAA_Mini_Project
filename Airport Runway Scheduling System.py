@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 
 class Flight:
-    def init(self, fid, arrival, duration, priority):
+    def __init__(self, fid, arrival, duration, priority):
         self.id = fid
         self.arrival = arrival
         self.duration = duration
