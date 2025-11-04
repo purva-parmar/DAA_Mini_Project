@@ -80,9 +80,10 @@ def priority_queue_schedule():
         Flight("AI101", 1, 3, 2),
         Flight("UK202", 2, 2, 1),
         Flight("EK303", 3, 4, 3),
-        Flight("QR404", 1, 2, 2)
+        Flight("QR404", 4, 2, 2)
     ]
-    flights.sort(key=lambda x: x.priority)
+
+    flights.sort(key=lambda x: (x.priority, x.arrival))
 
     runways = [0, 0]
     data = []
@@ -92,6 +93,7 @@ def priority_queue_schedule():
         start = max(f.arrival, runways[r])
         end = start + f.duration
         runways[r] = end
+        
         data.append({
             "Flight": f.id,
             "Runway": r,
