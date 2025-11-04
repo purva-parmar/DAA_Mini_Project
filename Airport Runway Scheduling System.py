@@ -63,7 +63,7 @@ def dynamic_programming_schedule():
     for i in range(1, n + 1):
         arr = arrival[i - 1]
         dur = duration[i - 1]
-        dp[i] = min(dp[i - 1] + dur, arr + dur)
+        dp[i] = max(dp[i - 1] + dur, arr + dur)
 
     df = pd.DataFrame({
         "Flight": [f"F{i}" for i in range(1, n + 1)],
